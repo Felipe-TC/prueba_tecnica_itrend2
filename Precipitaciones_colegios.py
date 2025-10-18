@@ -25,7 +25,31 @@ prec_por_comuna = prec_2020.groupby('COMUNA')['Precipitación_diaria'].sum().res
 prec_por_comuna.rename(columns={'Precipitación_diaria': 'LLUVIA_2020_MM'}, inplace=True)
 
 
+# Normalizamos nombres de comuna para evitar errores por mayúsculas/minúsculas
+def norm(s):
+    if pd.isna(s): return ''
+    return str(s).strip().upper()
 
+coleg_maule['NOM_COM_RB_NORM'] = coleg_maule['NOM_COM_RB'].apply(norm)
+prec_por_comuna['COMUNA_NORM'] = prec_por_comuna['COMUNA'].apply(norm)
+
+
+# Merge colegios con precipitaciones
+coleg_maule_prec = coleg_maule.merge(
+    prec_por_comuna[['COMUNA_NORM', 'LLUVIA_2020_MM']],
+    left_on='NOM_COM_RB_NORM',
+    right_on='COMUNA_NORM',
+    how='left'
+)
+
+
+# Ordenamos para ver los colegios más expuestos
+coleg_maule_prec = coleg_maule_prec.sort_values('LLUVIA_2020_MM', ascending=False)
+
+
+# Seleccionamos columnas relevantes para mostrar
+out_cols = ['RBD', 'NOM_RBD', 'NOM_COM_RB', 'COD_COM_RB', 'COD_REG_RB', 'LLUVIA_2020_MM']
+print(coleg_maule_prec[out_cols].head(20))  # top 20 colegios más expuestos
 
 #print(archivo_precipitaciones_read)
 
