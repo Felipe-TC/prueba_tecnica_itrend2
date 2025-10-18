@@ -67,6 +67,6 @@ print(f"Lluvia mínima registrada: {lluvia_min:.1f} mm")
 print(f"Lluvia promedio regional: {lluvia_prom:.1f} mm")
 print("==============================================\n")
 
-# Mostrar los 10 colegios más expuestos
-print("🏫 Top 10 colegios más expuestos a precipitaciones en 2020:")
+# Mostrar los 100 colegios más expuestos
+print("🏫 Top 100 colegios más expuestos a precipitaciones en 2020:")
 print(coleg_maule_prec[out_cols].head(100).to_string(index=False))
